@@ -626,13 +626,40 @@ html.js:not(.is-open) body { overflow: hidden; }
   margin-top: .2rem;
   z-index: 1;
 }
-.event {
+.timeline {                    /* the running order of the day */
   grid-column: 1 / -1;
-  display: grid;
-  gap: .55rem;
-  margin-top: 1.3rem;
+  margin: .6rem 0 0;
+  padding: 0;
+  list-style: none;
 }
-.details-panel .pearl-rule { grid-column: 1 / -1; margin-bottom: .3rem; }
+.moment {
+  display: grid;
+  justify-items: center;
+  gap: .2rem;
+  padding-block: 1.05rem;
+}
+.moment + .moment {            /* a pearl on a thread between moments */
+  padding-top: 1.6rem;
+  background:
+    radial-gradient(circle at 42% 38%, #fff 0, #F2ECE2 1.6px, #D3C8B5 4px, rgba(211, 200, 181, 0) 4.6px) 50% 0 / 10px 10px no-repeat,
+    linear-gradient(rgba(var(--shadow), .28), rgba(var(--shadow), .28)) 50% 4.5px / 6rem 1px no-repeat;
+}
+.moment-time {
+  margin: 0;
+  font: 600 .8rem/1.4 var(--font-serif);
+  letter-spacing: .26em;
+  padding-left: .26em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+}
+.moment-note {
+  margin: 0;
+  font: 600 .74rem/1.5 var(--font-serif);
+  letter-spacing: .16em;
+  padding-left: .16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
 .details-bl {
   grid-column: 1;
   width: 66%;
@@ -679,6 +706,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   font-style: italic;
   font-size: 1.3rem;
 }
+.venue-when-small { font-size: 1.08rem; color: var(--ink-soft); }
 .venue-address {
   display: grid;
   margin: 0 0 .3rem;
@@ -746,7 +774,9 @@ html.js:not(.is-open) body { overflow: hidden; }
   text-wrap: balance;
   color: var(--ink-soft);
 }
-.dress .accessories { width: 86%; margin: 1.5rem auto 0; }
+.pop { max-width: 30ch; margin: 1.9rem auto 0; }
+.pop-title { font-size: clamp(1.7rem, 7.4vw, 2.1rem); }
+.pop-note { margin: .45rem 0 0; font-style: italic; text-wrap: balance; color: var(--ink-soft); }
 
 
 /* --- 6. where to stay --- */
