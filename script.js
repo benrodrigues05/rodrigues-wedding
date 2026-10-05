@@ -18,6 +18,7 @@
   safely(initEnvelope, revealNow);
   safely(initCountdown);
   safely(initRsvp);
+  safely(initPlaylist);
   safely(initFab);
   window.__inviteReady = true;
 
@@ -306,30 +307,81 @@
 
 
   /* ------------------------------------------------------------------ */
-  /* RSVP                                                                 */
+  /* Forms: the RSVP card and the playlist (both post to Formspree)       */
   /* ------------------------------------------------------------------ */
+
+  // Shared set-up for a form that posts to Formspree.
+  function formSender(form) {
+    var endpoint = form.getAttribute('action') || '';
+    var live = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint) && endpoint.indexOf('YOUR_FORM_ID') === -1;
+    // the backup address is stored in two halves so spam bots don't harvest it
+    var user = (form.getAttribute('data-fallback-user') || '').trim();
+    var domain = (form.getAttribute('data-fallback-domain') || '').trim();
+    form.noValidate = true;
+    // record which personalised invitation (the ?to= name) a reply came from
+    Array.prototype.forEach.call(form.querySelectorAll('.invitation-field'), function (n) { n.value = guest; });
+    return {
+      live: live,
+      fallbackEmail: user && domain ? user + '@' + domain : '',
+      send: function (data) {
+        if (!live) return new Promise(function (resolve) { setTimeout(resolve, 900); });
+        return fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+          .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); });
+      }
+    };
+  }
+
+  function showSendProblem(box, sender, what, subject, body) {
+    box.textContent = '';
+    box.appendChild(el('p', '', 'Your ' + what + ' didn’t go through. Please check your connection and try again.'));
+    if (sender.fallbackEmail) {
+      var p = el('p', '', 'If it still won’t send, email it to us at ');
+      var a = document.createElement('a');
+      a.href = 'mailto:' + sender.fallbackEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      a.textContent = sender.fallbackEmail;
+      p.appendChild(a);
+      p.appendChild(document.createTextNode('.'));
+      box.appendChild(p);
+    }
+    box.hidden = false;
+    box.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  function summarise(data, labels) {
+    var lines = [];
+    Object.keys(labels).forEach(function (k) {
+      var v = data.get(k);
+      if (v) lines.push(labels[k] + ': ' + v);
+    });
+    return lines.join('\n');
+  }
+
+  function showError(input, msgEl, text) {
+    msgEl.textContent = text;
+    msgEl.hidden = false;
+    if (input) input.setAttribute('aria-invalid', 'true');
+  }
+
+  function clearError(input, msgEl) {
+    msgEl.hidden = true;
+    if (input) input.removeAttribute('aria-invalid');
+  }
 
   function initRsvp() {
     var form = byId('rsvp-form');
     if (!form) return;
-    form.noValidate = true;
+    var sender = formSender(form);
 
     var nameInput = byId('rsvp-name'), subject = byId('rsvp-subject'),
         nameError = byId('rsvp-name-error'), attendError = byId('rsvp-attending-error'),
         problem = byId('rsvp-problem'), submit = byId('rsvp-submit'),
         submitLabel = byId('rsvp-submit-label'), done = byId('rsvp-done'),
         doneName = byId('done-name'), doneMessage = byId('done-message'),
-        edit = byId('rsvp-edit'), previewNote = byId('preview-note');
-
-    var endpoint = form.getAttribute('action') || '';
-    var live = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint) && endpoint.indexOf('YOUR_FORM_ID') === -1;
-    // the backup address is stored in two halves so spam bots don't harvest it
-    var fallbackUser = (form.getAttribute('data-fallback-user') || '').trim();
-    var fallbackDomain = (form.getAttribute('data-fallback-domain') || '').trim();
-    var fallbackEmail = fallbackUser && fallbackDomain ? fallbackUser + '@' + fallbackDomain : '';
+        donePlaylist = byId('done-playlist'), edit = byId('rsvp-edit'),
+        previewNote = byId('preview-note');
     var STORE_KEY = 'wedding-rsvp';
 
-    if (!live) previewNote.hidden = false;
+    if (!sender.live) previewNote.hidden = false;
     if (guest && !nameInput.value) nameInput.value = guest;
 
     var saved = load();
@@ -361,15 +413,17 @@
       var coming = choice.value === 'Joyfully accepts';
       subject.value = 'RSVP: ' + name + (coming ? ' (coming)' : ' (not coming)');
       var data = new FormData(form);
-      if (!coming) ['guests', 'dietary', 'song'].forEach(function (k) { data.delete(k); });
+      if (!coming) data.delete('dietary');
 
       busy(true);
-      send(data).then(function () {
-        var reply = { name: name, coming: coming, preview: !live };
+      sender.send(data).then(function () {
+        var reply = { name: name, coming: coming, preview: !sender.live };
         save(reply);
         showDone(reply, true);
       }, function () {
-        showSendProblem(name, data);
+        showSendProblem(problem, sender, 'reply', 'RSVP: ' + name, summarise(data, {
+          invitation: 'Invitation', name: 'Name', attending: 'Reply', dietary: 'Dietary', email: 'Email', message: 'Note'
+        }));
       }).then(function () { busy(false); });
     });
 
@@ -379,63 +433,21 @@
       nameInput.focus();
     });
 
-    function send(data) {
-      if (!live) return new Promise(function (resolve) { setTimeout(resolve, 900); });
-      return fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
-        .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); });
-    }
-
     function showDone(reply, moveFocus) {
       doneName.textContent = reply.name;
       doneMessage.textContent = reply.coming
         ? 'We can’t wait to celebrate with you.'
         : 'You’ll be missed. Thank you for letting us know.';
       if (reply.preview) doneMessage.textContent += ' (Preview only, so nothing was sent.)';
+      donePlaylist.hidden = !reply.coming;
       form.hidden = true;
       done.hidden = false;
       if (moveFocus) done.focus();
     }
 
-    function showSendProblem(name, data) {
-      problem.textContent = '';
-      problem.appendChild(el('p', '', 'Your reply didn’t go through. Please check your connection and try again.'));
-      if (fallbackEmail) {
-        var p = el('p', '', 'If it still won’t send, email it to us at ');
-        var a = document.createElement('a');
-        a.href = 'mailto:' + fallbackEmail + '?subject=' + encodeURIComponent('RSVP: ' + name) + '&body=' + encodeURIComponent(summarise(data));
-        a.textContent = fallbackEmail;
-        p.appendChild(a);
-        p.appendChild(document.createTextNode('.'));
-        problem.appendChild(p);
-      }
-      problem.hidden = false;
-      problem.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
-    }
-
-    function summarise(data) {
-      var labels = { name: 'Name', attending: 'Reply', guests: 'Guests', dietary: 'Dietary', song: 'Song', email: 'Email', message: 'Note' };
-      var lines = [];
-      Object.keys(labels).forEach(function (k) {
-        var v = data.get(k);
-        if (v) lines.push(labels[k] + ': ' + v);
-      });
-      return lines.join('\n');
-    }
-
     function busy(on) {
       submit.disabled = on;
       submitLabel.textContent = on ? 'Sending…' : 'Send reply';
-    }
-
-    function showError(input, msgEl, text) {
-      msgEl.textContent = text;
-      msgEl.hidden = false;
-      if (input) input.setAttribute('aria-invalid', 'true');
-    }
-
-    function clearError(input, msgEl) {
-      msgEl.hidden = true;
-      if (input) input.removeAttribute('aria-invalid');
     }
 
     function load() {
@@ -447,21 +459,79 @@
     }
   }
 
+  function initPlaylist() {
+    var form = byId('playlist-form');
+    if (!form) return;
+    var sender = formSender(form);
+
+    var song1 = byId('song-1'), song2 = byId('song-2'), song1Error = byId('song-1-error'),
+        who = byId('song-name'), subject = byId('playlist-subject'),
+        problem = byId('playlist-problem'), submit = byId('playlist-submit'),
+        submitLabel = byId('playlist-submit-label'), done = byId('playlist-done'),
+        doneMessage = byId('playlist-done-message'), again = byId('playlist-again'),
+        previewNote = byId('playlist-preview-note');
+
+    if (!sender.live) previewNote.hidden = false;
+    if (guest && !who.value) who.value = guest;
+    song1.addEventListener('input', function () { clearError(song1, song1Error); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (submit.disabled) return;
+      problem.hidden = true;
+      if (!song1.value.trim()) {
+        showError(song1, song1Error, 'Add a song first, with the artist if you know it.');
+        song1.focus();
+        return;
+      }
+      var name = who.value.replace(/\s+/g, ' ').trim();
+      subject.value = 'Song request' + (name ? ': ' + name : '');
+      var data = new FormData(form);
+
+      busy(true);
+      sender.send(data).then(function () {
+        doneMessage.textContent = 'Thank you' + (name ? ', ' + name : '') + '. It’s on our list.' +
+          (sender.live ? '' : ' (Preview only, so nothing was sent.)');
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+      }, function () {
+        showSendProblem(problem, sender, 'suggestion', subject.value, summarise(data, {
+          song_1: 'Song', song_2: 'Another song', name: 'From'
+        }));
+      }).then(function () { busy(false); });
+    });
+
+    again.addEventListener('click', function () {
+      song1.value = '';
+      song2.value = '';
+      done.hidden = true;
+      form.hidden = false;
+      song1.focus();
+    });
+
+    function busy(on) {
+      submit.disabled = on;
+      submitLabel.textContent = on ? 'Adding…' : 'Add to the playlist';
+    }
+  }
+
 
   /* ------------------------------------------------------------------ */
   /* Floating RSVP shortcut                                               */
   /* ------------------------------------------------------------------ */
 
   function initFab() {
-    var fab = byId('rsvp-fab'), hero = byId('top'), rsvp = byId('rsvp');
+    var fab = byId('rsvp-fab'), hero = byId('top'), rsvp = byId('rsvp'), playlist = byId('playlist');
     if (!fab || !hero || !rsvp || !('IntersectionObserver' in window)) return;
-    var inView = { top: true, rsvp: false };
+    var inView = { top: true, rsvp: false, playlist: false };
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { inView[en.target.id] = en.isIntersecting; });
-      fab.classList.toggle('is-visible', !inView.top && !inView.rsvp);
+      fab.classList.toggle('is-visible', !inView.top && !inView.rsvp && !inView.playlist);
     });
     io.observe(hero);
     io.observe(rsvp);
+    if (playlist) io.observe(playlist);
   }
 
 

@@ -833,7 +833,15 @@ html.js:not(.is-open) body { overflow: hidden; }
   rotate: 6deg;
   filter: drop-shadow(0 1px 1.5px rgba(var(--shadow), .25));
 }
-.reply-by { margin: .3rem 0 1.8rem; font-style: italic; color: var(--ink-soft); }
+.reply-by { margin: .3rem 0 .4rem; font-style: italic; color: var(--ink-soft); }
+.reply-note {
+  max-width: 26ch;
+  margin: 0 auto 1.8rem;
+  font-size: 1.02rem;
+  font-style: italic;
+  text-wrap: balance;
+  color: var(--ink-faint);
+}
 
 .rsvp-form {
   display: grid;
@@ -1005,6 +1013,12 @@ html.js:not(.is-open) body { overflow: hidden; }
 .done-seal { width: 84px; filter: drop-shadow(0 2px 3px rgba(var(--shadow), .3)); }
 .done-title { margin-top: .3rem; }
 .reply-done .lede { max-width: 26ch; }
+
+
+/* --- 9. the playlist --- */
+.playlist .gramophone { width: 58%; max-width: 15rem; margin: -.6rem auto .6rem; }
+.playlist .lede { max-width: 28ch; margin-block: .7rem 1.6rem; }
+.playlist .reply-done { padding-block: .4rem .2rem; }
 
 
 /* --- closing --- */
