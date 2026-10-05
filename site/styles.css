@@ -1,0 +1,1101 @@
+/* =====================================================================
+   Wedding invitation
+   Layout: a stationery suite laid out on a linen tablecloth. One centred
+   column; every section is a different object from the suite: the letter,
+   a striped linen runner, a card, fringed napkins and a reply card.
+   The look is deliberately single-theme (cream linen in every OS theme),
+   like a printed invitation.
+   ===================================================================== */
+
+:root {
+  /* colour */
+  --linen: #E8E3D7;          /* the tablecloth */
+  --paper: #F7F3EB;          /* letter and cards */
+  --envelope: #EEE7DA;
+  --ink: #2E2C27;
+  --ink-soft: #57534A;
+  --ink-faint: #8B8578;
+  --sage: #8C9A78;
+  --sage-deep: #44593F;
+  --stitch: rgba(93, 106, 77, .5);
+  --error: #8E3E2C;
+  --shadow: 60, 50, 35;      /* rgb triplet for shadows */
+
+  /* type */
+  --font-script: "Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+  --font-serif: "Cormorant Garamond", "Cormorant", "EB Garamond", Garamond, "Times New Roman", serif;
+  --fs-names: clamp(2.6rem, 12.5vw, 4.2rem);
+  --fs-title: clamp(2.5rem, 11vw, 3.6rem);
+  --fs-sub: clamp(1.9rem, 8.2vw, 2.45rem);
+  --fs-body: 1.2rem;
+  --fs-caps: .78rem;
+
+  /* layout */
+  --gutter: 16px;
+  --column: 34rem;
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .28 0 0 0 0 .22 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --linen-tex: url("assets/linen.webp");
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--linen);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--linen) var(--linen-tex) 0 0 / 450px 450px repeat;
+  color: var(--ink);
+  font: 500 var(--fs-body)/1.55 var(--font-serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+[hidden] { display: none !important; }
+.is-hidden { visibility: hidden; }
+
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--sage-deep); outline-offset: 3px; }
+
+/* While the envelope is sealed the page underneath can't scroll. */
+html.js:not(.is-open),
+html.js:not(.is-open) body { overflow: hidden; }
+
+
+/* =====================================================================
+   THE ENVELOPE
+   ===================================================================== */
+
+.scene { display: none; }
+
+.js .scene {
+  --ew: min(86vw, 25rem);
+  --ew: min(86vw, 31rem, calc(58svh * 1.42));
+  --eh: calc(var(--ew) / 1.42);
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--linen) var(--linen-tex) 0 0 / 450px 450px repeat;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+.js.is-open .scene { display: none; }
+
+.scene-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 90% at 50% 42%, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, 0) 46%, rgba(var(--shadow), .16) 100%);
+}
+
+.scene-sprig {
+  position: absolute;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(var(--shadow), .2));
+}
+.scene-sprig--top { width: min(56vw, 290px); top: -1.5vh; left: -8vw; rotate: -4deg; }
+.scene-sprig--bottom { width: min(40vw, 230px); right: -6vw; bottom: -5vh; rotate: 180deg; }
+
+.envelope {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: var(--ew);
+  height: var(--eh);
+  margin: calc(var(--eh) / -2) 0 0 calc(var(--ew) / -2);
+  animation: env-float 5s ease-in-out infinite;
+}
+.scene.is-opening .envelope { animation: none; }
+@keyframes env-float { 50% { translate: 0 -5px; } }
+
+.env-front,
+.env-back { position: absolute; inset: 0; }
+
+/* --- address side --- */
+.env-front {
+  z-index: 2;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--envelope) var(--paper-grain);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .4),
+    0 1px 1px rgba(var(--shadow), .12),
+    0 22px 34px -18px rgba(var(--shadow), .5);
+}
+.env-stamp {
+  position: absolute;
+  top: 9%;
+  right: 6.5%;
+  width: 16.5%;
+  rotate: 3deg;
+  filter: drop-shadow(0 1px 1.5px rgba(var(--shadow), .28));
+}
+.env-postmark {
+  position: absolute;
+  top: 10%;
+  left: 54%;
+  width: 48%;
+  color: rgba(66, 58, 48, .6);
+  mix-blend-mode: multiply;
+  rotate: -8deg;
+  pointer-events: none;
+}
+.env-to {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  top: 47%;
+  margin: 0;
+  text-align: center;
+}
+.env-recipient {
+  font: 400 calc(var(--ew) * .085)/1.15 var(--font-script);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.env-sprig {
+  position: absolute;
+  left: 2%;
+  bottom: 4%;
+  width: 30%;
+  rotate: 180deg;
+  filter: drop-shadow(0 1px 1.5px rgba(var(--shadow), .2));
+}
+
+/* --- flap side --- */
+.env-back { z-index: 1; }
+
+.env-wall {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: #E7DFD0 var(--paper-grain);
+  box-shadow: 0 22px 34px -18px rgba(var(--shadow), .5);
+}
+.env-wall::before {           /* the patterned liner */
+  content: "";
+  position: absolute;
+  inset: 5% 4.5% 0;
+  border-radius: 2px 2px 0 0;
+  background: url("assets/liner.webp") 50% 0 / 150px 150px;
+}
+.env-wall::after {            /* shadow inside the envelope's mouth */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(var(--shadow), .22), rgba(var(--shadow), 0) 42%);
+}
+
+.env-pocket {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 -1px 2px rgba(var(--shadow), .14));
+}
+
+.flap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 57%;
+  transform-origin: 50% 0;
+}
+.flap svg { width: 100%; height: 100%; overflow: visible; }
+.flap--closed { z-index: 5; filter: drop-shadow(0 1.5px 2px rgba(var(--shadow), .24)); }
+.flap--open { z-index: 2; transform: perspective(800px) rotateX(90deg); }
+.flap-paper,
+.flap-liner { position: absolute; inset: 0; }
+.flap-paper { clip-path: polygon(0 0, 100% 0, 50% 100%); background: #E7DFD0; }
+.flap-liner { clip-path: polygon(5.5% 0, 94.5% 0, 50% 90%); background: url("assets/liner.webp") 50% 0 / 150px 150px; }
+
+.env-seal {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 57%;
+  width: 22%;
+  translate: -50% -50%;
+  filter: drop-shadow(0 2px 2.5px rgba(var(--shadow), .35));
+}
+
+/* --- the folded letter (geometry is set by script.js) --- */
+.letter {
+  position: absolute;
+  z-index: 3;
+  transform-origin: 0 0;
+}
+.panel {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--t);
+  overflow: hidden;
+  box-shadow: 0 8px 18px -12px rgba(var(--shadow), .45);
+}
+.p1 { top: 0; z-index: 3; transform-origin: 50% 100%; visibility: hidden; }
+.p2 { top: var(--t); z-index: 1; }
+.p3 { top: calc(var(--t) * 2); z-index: 2; transform-origin: 50% 0; visibility: hidden; }
+.letter-fold {                 /* the folded letter's outside, while it's in the envelope */
+  position: absolute;
+  left: 0;
+  top: var(--t);
+  z-index: 4;
+  width: 100%;
+  height: var(--t);
+  display: grid;
+  place-items: center;
+  background: var(--paper) var(--paper-grain);
+  box-shadow: 0 8px 18px -12px rgba(var(--shadow), .45);
+}
+
+.face {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--lw);
+  height: var(--lh);
+}
+.p2 .face-in { top: calc(var(--t) * -1); }
+.p3 .face-in { top: calc(var(--t) * -2); }
+.face-out {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--paper) var(--paper-grain);
+  transform: scaleY(-1);       /* reads the right way up once folded over */
+}
+.letter .card-clone {          /* two classes so it beats .hero-card's own sizing */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--cw);
+  max-width: none;
+  height: var(--ch);
+  margin: 0;
+  transform: scale(var(--s));
+  transform-origin: 0 0;
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--shadow));
+  opacity: 0;
+  pointer-events: none;
+}
+.letter-mono {
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--t) * .05);
+  text-align: center;
+}
+.letter-mono .m-names { font: 400 calc(var(--t) * .2)/1 var(--font-script); color: var(--ink); }
+.letter-mono .m-caps {
+  font: 600 calc(var(--t) * .055)/1 var(--font-serif);
+  letter-spacing: .3em;
+  padding-left: .3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* --- tap target and hint --- */
+.scene-open {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.scene-open:focus-visible { outline: none; }
+.scene-open:focus-visible .scene-hint { outline: 2px solid var(--sage-deep); outline-offset: 4px; }
+.scene-hint {
+  position: absolute;
+  left: 50%;
+  top: calc(44% + var(--eh) / 2 + 1.6rem);
+  translate: -50% 0;
+  padding: .85em 1.3em .85em 1.64em;
+  border-radius: 999px;
+  font: 600 .76rem/1 var(--font-serif);
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-soft);
+  animation: hint-breathe 2.8s ease-in-out infinite;
+}
+@keyframes hint-breathe { 50% { opacity: .45; } }
+
+
+/* =====================================================================
+   THE SUITE
+   ===================================================================== */
+
+.suite {
+  max-width: var(--column);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.suite > section,
+.suite > footer {
+  position: relative;
+  padding-block: clamp(3.25rem, 13vw, 5rem);
+  text-align: center;
+}
+
+/* --- shared type --- */
+.script-title {
+  margin: 0;
+  font: 400 var(--fs-title)/1.12 var(--font-script);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.script-sub {
+  margin: 0;
+  font: 400 var(--fs-sub)/1.15 var(--font-script);
+  color: var(--ink);
+}
+.caps {
+  margin: 0;
+  font: 600 var(--fs-caps)/1.7 var(--font-serif);
+  letter-spacing: .26em;
+  padding-left: .26em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--ink-soft);
+}
+.lede {
+  margin: 0 auto;
+  max-width: 30ch;
+  font-style: italic;
+  text-wrap: balance;
+  color: var(--ink-soft);
+}
+.lines {
+  display: grid;
+  gap: .2rem;
+  margin: 0;
+  font: 600 .9rem/1.55 var(--font-serif);
+  letter-spacing: .17em;
+  padding-left: .17em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.lines--soft { color: var(--ink-soft); font-size: .82rem; }
+
+.rule {
+  display: block;
+  width: 3.5rem;
+  height: 1px;
+  margin: 1.3rem auto;
+  background: rgba(var(--shadow), .35);
+}
+.pearl-rule {
+  display: block;
+  width: 7rem;
+  height: 10px;
+  margin: 1.7rem auto;
+  background:
+    radial-gradient(circle at 42% 38%, #fff 0, #F2ECE2 1.6px, #D3C8B5 4px, rgba(211, 200, 181, 0) 4.6px) 50% 50% / 10px 10px no-repeat,
+    linear-gradient(rgba(var(--shadow), .3), rgba(var(--shadow), .3)) 50% 50% / 100% 1px no-repeat;
+}
+
+.text-link {
+  display: inline-block;
+  padding: .8rem 0 .55rem .28em;
+  font: 600 .76rem/1 var(--font-serif);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  background: linear-gradient(currentColor, currentColor) .28em 100% / calc(100% - .56em) 1px no-repeat;
+}
+.text-link:hover { color: var(--sage-deep); }
+.text-button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+
+/* --- 1. the letter --- */
+.hero { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+.suite > .hero { padding-block: calc(14px + env(safe-area-inset-top, 0px)) 0; }
+
+.hero-card {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 1.4rem clamp(.85rem, 4vw, 1.4rem) 1.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--paper) var(--paper-grain);
+  box-shadow: 0 1px 1px rgba(var(--shadow), .1), 0 16px 34px -20px rgba(var(--shadow), .6);
+}
+.hero-card:focus { outline: none; }
+.hero-card::after {           /* the creases left from folding it in three */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(var(--shadow), 0) calc(100% / 3 - 9px),
+      rgba(var(--shadow), .05) calc(100% / 3 - 1px),
+      rgba(255, 255, 255, .6) calc(100% / 3),
+      rgba(var(--shadow), .07) calc(100% / 3 + 1px),
+      rgba(var(--shadow), 0) calc(100% / 3 + 10px)),
+    linear-gradient(to bottom,
+      rgba(var(--shadow), 0) calc(200% / 3 - 9px),
+      rgba(var(--shadow), .05) calc(200% / 3 - 1px),
+      rgba(255, 255, 255, .6) calc(200% / 3),
+      rgba(var(--shadow), .07) calc(200% / 3 + 1px),
+      rgba(var(--shadow), 0) calc(200% / 3 + 10px));
+}
+.eyebrow {
+  margin: 0 0 .85rem;
+  font: 600 .72rem/1.2 var(--font-serif);
+  letter-spacing: .34em;
+  padding-left: .34em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hero-arch { width: 100%; max-width: 25rem; }
+.names {
+  margin: .5rem 0 .2rem;
+  font: 400 var(--fs-names)/1.02 var(--font-script);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.names .amp { font-size: .82em; }
+.hero-date {
+  margin: .55rem 0 0;
+  font: 600 .84rem/1.4 var(--font-serif);
+  letter-spacing: .3em;
+  padding-left: .3em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.hero-place {
+  margin: .3rem 0 0;
+  font: 600 .7rem/1.4 var(--font-serif);
+  letter-spacing: .34em;
+  padding-left: .34em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+
+/* --- 2. families + countdown --- */
+.families {
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: calc(var(--gutter) + 13vw);
+  overflow: hidden;
+}
+.garland {
+  position: absolute;
+  top: 2.2rem;
+  width: clamp(58px, 17vw, 110px);
+  pointer-events: none;
+}
+.garland--left { left: -4vw; }
+.garland--right { right: -4vw; scale: -1 1; }
+
+.families .script-title { position: relative; }
+.invite-lede { margin-top: .8rem; max-width: 20ch; font-size: 1.32rem; }
+.countdown {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 24rem;
+  margin: 2.1rem auto 0;
+}
+.cd {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: .45rem;
+}
+.cd + .cd::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .2rem;
+  height: 2.6rem;
+  width: 1px;
+  background: rgba(var(--shadow), .28);
+}
+.cd-num {
+  min-height: 1.05em;
+  font: 400 clamp(2.1rem, 9vw, 2.7rem)/1.05 var(--font-script);
+  color: var(--ink);
+}
+.cd-label {
+  font: 600 .6rem/1 var(--font-serif);
+  letter-spacing: .2em;
+  padding-left: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.countdown-done { margin-top: 2rem; }
+.calendar { margin-top: 2.3rem; }
+.calendar-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1.4rem;
+  margin: .1rem 0 0;
+}
+
+
+/* --- 3. the details: striped linen runner --- */
+.suite > .details { padding-block: 1.5rem; margin-inline: calc(var(--gutter) * -1); }
+.details-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  padding: 1.4rem 1.1rem 1.6rem;
+  background-color: #EFEAE1;
+  background-image:
+    repeating-linear-gradient(90deg, var(--stitch) 0 7px, transparent 7px 12px),
+    repeating-linear-gradient(90deg, var(--stitch) 0 7px, transparent 7px 12px),
+    linear-gradient(rgba(255, 255, 255, .42), rgba(255, 255, 255, .42)),
+    var(--linen-tex);
+  background-size: 100% 1.5px, 100% 1.5px, auto, 420px 420px;
+  background-position: 0 14px, 0 calc(100% - 14px), 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: 0 1px 2px rgba(var(--shadow), .08), 0 22px 36px -28px rgba(var(--shadow), .7);
+}
+.details-panel::before,
+.details-panel::after {        /* the sage ribbon stripes with a twisted cord */
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 15px;
+  background:
+    linear-gradient(90deg, transparent 0 2px, rgba(140, 154, 120, .6) 2px 3.5px, transparent 3.5px calc(100% - 3.5px), rgba(140, 154, 120, .6) calc(100% - 3.5px) calc(100% - 2px), transparent calc(100% - 2px)),
+    repeating-linear-gradient(-58deg, transparent 0 2.2px, rgba(140, 154, 120, .75) 2.2px 4px) 50% 0 / 5px 100% no-repeat;
+}
+.details-panel::before { left: 14%; }
+.details-panel::after { right: 14%; }
+
+.details-panel > * { position: relative; }
+.details-tl {
+  grid-column: 1;
+  width: 84%;
+  margin: -1.1rem 0 0 -12%;
+}
+.details-tr {
+  grid-column: 2;
+  justify-self: end;
+  align-self: start;
+  width: 56%;
+  margin: -1.5rem 4% 0 0;
+}
+.details-title {
+  grid-column: 1 / -1;
+  margin-top: .2rem;
+  z-index: 1;
+}
+.event {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: .55rem;
+  margin-top: 1.3rem;
+}
+.details-panel .pearl-rule { grid-column: 1 / -1; margin-bottom: .3rem; }
+.details-bl {
+  grid-column: 1;
+  width: 66%;
+  margin: 1.6rem 0 0 4%;
+}
+.details-br {
+  grid-column: 2;
+  justify-self: end;
+  width: 50%;
+  margin-right: 6%;
+}
+
+
+/* --- 4. the celebrations --- */
+.celebrations .chapel {
+  position: relative;
+  z-index: 2;
+  width: 104%;
+  max-width: none;
+  margin: 1rem -2% 0;
+}
+.venue-card {
+  position: relative;
+  z-index: 1;
+  margin-top: -2.6rem;
+  padding: 3.4rem 1.4rem 2.4rem;
+  border-radius: 26px;
+  background: var(--paper) var(--paper-grain);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--shadow), .1),
+    inset 0 0 0 7px var(--paper),
+    inset 0 0 0 8px rgba(var(--shadow), .08),
+    0 18px 34px -24px rgba(var(--shadow), .65);
+}
+.venue-name {
+  margin: .5rem 0 .7rem;
+  font: 400 clamp(2.8rem, 13vw, 3.8rem)/1 var(--font-script);
+}
+.venue-desc { margin: 0; color: var(--ink-soft); text-wrap: balance; }
+.venue-when {
+  display: grid;
+  gap: .15rem;
+  margin: 0 0 .5rem;
+  font-style: italic;
+  font-size: 1.3rem;
+}
+.venue-address {
+  display: grid;
+  margin: 0 0 .3rem;
+  font: 600 .68rem/1.6 var(--font-serif);
+  letter-spacing: .22em;
+  padding-left: .22em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--ink-faint);
+}
+.venue-key {
+  position: absolute;
+  right: 10px;
+  bottom: -26px;
+  width: 58px;
+  rotate: 14deg;
+  filter: drop-shadow(0 2px 2px rgba(var(--shadow), .2));
+}
+
+
+/* --- 5 & 7. fringed linen napkins --- */
+.napkin {
+  position: relative;
+  margin-block: 22px;
+  padding: 2rem 1.15rem 2.4rem;
+  background-color: #F2EEE6;
+  background-image:
+    repeating-linear-gradient(90deg, var(--stitch) 0 6px, transparent 6px 10px),
+    repeating-linear-gradient(90deg, var(--stitch) 0 6px, transparent 6px 10px),
+    linear-gradient(rgba(255, 255, 255, .48), rgba(255, 255, 255, .48)),
+    var(--linen-tex);
+  background-size: calc(100% - 28px) 1.2px, calc(100% - 28px) 1.2px, auto, 400px 400px;
+  background-position: 14px 12px, 14px calc(100% - 12px), 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  box-shadow: 0 2px 2px rgba(var(--shadow), .06), 0 20px 34px -24px rgba(var(--shadow), .6);
+}
+.napkin::before,
+.napkin::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: url("assets/fringe.svg") 0 0 / 180px 20px repeat-x;
+  filter: drop-shadow(0 1px 1px rgba(var(--shadow), .12));
+}
+.napkin::before { bottom: calc(100% - 1px); scale: 1 -1; }
+.napkin::after { top: calc(100% - 1px); }
+
+.napkin-sprigs {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: -1.4rem -.5rem -2.4rem;
+}
+.napkin-sprigs img:first-child { width: 33%; }
+.napkin-sprigs img:last-child { width: 40%; margin-top: .2rem; }
+.dress .guests { width: 100%; margin: 0 auto 1.4rem; }
+.dress-name { margin: .2rem 0 1rem; font-size: clamp(1.7rem, 7.4vw, 2.2rem); }
+.dress .threads { width: 96%; margin: 1.7rem auto 0; }
+.palette-note {
+  max-width: 26ch;
+  margin: .5rem auto 0;
+  font-style: italic;
+  text-wrap: balance;
+  color: var(--ink-soft);
+}
+.dress .accessories { width: 86%; margin: 1.5rem auto 0; }
+
+
+/* --- 6. where to stay --- */
+.nightstand { width: 86px; margin: 0 auto 1rem; }
+.stay .caps { margin: .4rem 0 1.1rem; }
+.stays {
+  display: grid;
+  gap: 1rem;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.stay-item {
+  position: relative;
+  padding: 1.6rem 1.2rem 1.1rem;
+  border-radius: 3px;
+  background: var(--paper) var(--paper-grain);
+  box-shadow: 0 1px 1px rgba(var(--shadow), .1), 0 14px 28px -22px rgba(var(--shadow), .6);
+}
+.stay-item::before {           /* hand-stitched border, like the reply card */
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px dashed rgba(93, 106, 77, .35);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.stay-name { margin: 0; font: 400 clamp(1.9rem, 8vw, 2.3rem)/1.1 var(--font-script); }
+.stay-meta {
+  margin: .5rem 0 0;
+  font: 600 .68rem/1.5 var(--font-serif);
+  letter-spacing: .2em;
+  padding-left: .2em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+}
+.stay-note {
+  max-width: 30ch;
+  margin: .55rem auto 0;
+  font-size: 1.12rem;
+  font-style: italic;
+  text-wrap: balance;
+  color: var(--ink-soft);
+}
+.stay-item .text-link { position: relative; margin-top: .3rem; }
+.stay-more { margin: 1.5rem 0 0; font-style: italic; color: var(--ink-soft); }
+.stay-more a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.stay .cottage { width: 100%; max-width: 26rem; margin: 2.4rem auto 0; }
+
+
+/* --- 7. getting there --- */
+.travel-motifs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -.4rem -.2rem 1.3rem;
+}
+.travel-car { width: 56%; }
+.travel-compass { width: 26%; }
+.napkin--travel .lede { margin-block: 1rem .6rem; max-width: 32ch; }
+
+
+/* --- 8. RSVP reply card --- */
+.reply-card {
+  position: relative;
+  padding: 2.8rem 1.3rem 2.3rem;
+  border-radius: 3px;
+  background: var(--paper) var(--paper-grain);
+  box-shadow: 0 1px 1px rgba(var(--shadow), .1), 0 18px 36px -24px rgba(var(--shadow), .65);
+}
+.reply-card::before {          /* hand-stitched border */
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1.3px dashed rgba(93, 106, 77, .42);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.reply-stamp {
+  position: absolute;
+  top: -14px;
+  right: 18px;
+  width: 52px;
+  rotate: 6deg;
+  filter: drop-shadow(0 1px 1.5px rgba(var(--shadow), .25));
+}
+.reply-by { margin: .3rem 0 1.8rem; font-style: italic; color: var(--ink-soft); }
+
+.rsvp-form {
+  display: grid;
+  gap: 1.6rem;
+  text-align: left;
+}
+.if-attending { display: grid; gap: 1.6rem; }
+.rsvp-form:has(#attend-no:checked) .if-attending { display: none; }
+
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.field { display: grid; gap: .3rem; }
+.field label,
+.choice legend {
+  font: 600 .7rem/1.4 var(--font-serif);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.optional {
+  letter-spacing: .04em;
+  text-transform: none;
+  font-style: italic;
+  font-weight: 500;
+  font-size: .95rem;
+  color: var(--ink-faint);
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  margin: 0;
+  padding: .35rem 0 .45rem;
+  border: 0;
+  border-bottom: 1px solid rgba(46, 44, 39, .35);
+  border-radius: 0;
+  background: transparent;
+  font: 500 1.2rem/1.4 var(--font-serif);
+  color: var(--ink);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field textarea { resize: vertical; min-height: 4.6rem; }
+.field select {
+  padding-right: 1.6rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2357534A' stroke-width='1.3'/%3E%3C/svg%3E") 100% 55% no-repeat;
+}
+.field input::placeholder { color: var(--ink-faint); font-style: italic; opacity: 1; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--sage-deep);
+  box-shadow: 0 1px 0 var(--sage-deep);
+}
+.field [aria-invalid="true"] { border-bottom-color: var(--error); }
+.field-error {
+  margin: .35rem 0 0;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--error);
+}
+
+.choice {
+  display: grid;
+  gap: .6rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.choice legend { padding: 0; margin-bottom: .55rem; }
+.choice-opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: .65rem 1rem;
+  border: 1px solid rgba(46, 44, 39, .2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .35);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.choice-opt input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+}
+.tick {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1.4px dashed var(--sage-deep);
+  border-radius: 50%;
+}
+.choice-opt input:checked + .tick::after {   /* a sewn-on pearl */
+  content: "";
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #fff 0, #F3EEE6 22%, #DDD3C2 70%, #C9BDA8 100%);
+  box-shadow: 0 1px 1.5px rgba(var(--shadow), .35);
+}
+.choice-opt:has(input:checked) { border-color: var(--sage-deep); background: rgba(140, 154, 120, .14); }
+.choice-opt input:focus-visible + .tick { outline: 2px solid var(--sage-deep); outline-offset: 3px; }
+.choice-text { font: 400 1.6rem/1.1 var(--font-script); color: var(--ink); }
+.choice--small .choice-text { font-size: 1.45rem; }
+
+.form-problem {
+  padding: .9rem 1rem;
+  border-left: 2px solid var(--error);
+  background: rgba(142, 62, 44, .06);
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--ink);
+}
+.form-problem p { margin: 0; }
+.form-problem p + p { margin-top: .4rem; }
+
+.send {
+  position: relative;
+  justify-self: center;
+  margin-top: .4rem;
+  padding: 1.1rem 2.3rem 1.1rem 2.6rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sage-deep);
+  color: var(--paper);
+  font: 600 .82rem/1 var(--font-serif);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 10px 20px -12px rgba(var(--shadow), .8);
+}
+.send::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed rgba(247, 243, 235, .55);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.send:disabled { opacity: .7; cursor: progress; }
+.preview-note {
+  margin: -.6rem 0 0;
+  text-align: center;
+  font-size: .98rem;
+  font-style: italic;
+  color: var(--ink-faint);
+}
+
+.reply-done {
+  display: grid;
+  justify-items: center;
+  gap: .7rem;
+}
+.reply-done:focus { outline: none; }
+.done-seal { width: 84px; filter: drop-shadow(0 2px 3px rgba(var(--shadow), .3)); }
+.done-title { margin-top: .3rem; }
+.reply-done .lede { max-width: 26ch; }
+
+
+/* --- closing --- */
+.closing { display: grid; justify-items: center; gap: .4rem; }
+.closing-seal { width: 64px; margin-bottom: .6rem; filter: drop-shadow(0 2px 3px rgba(var(--shadow), .3)); }
+.closing-names { margin: 0 0 .5rem; font: 400 var(--fs-title)/1.1 var(--font-script); }
+
+
+/* --- floating RSVP shortcut (shown by script.js once you scroll) --- */
+.rsvp-fab {
+  position: fixed;
+  z-index: 40;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding: 1rem 1.1rem 1rem 1.4rem;
+  border-radius: 999px;
+  background: var(--sage-deep);
+  color: var(--paper);
+  font: 600 .78rem/1 var(--font-serif);
+  letter-spacing: .3em;
+  text-decoration: none;
+  box-shadow: 0 10px 22px -10px rgba(var(--shadow), .75);
+  opacity: 0;
+  translate: 0 12px;
+  pointer-events: none;
+  transition: opacity .3s ease, translate .3s ease;
+}
+.rsvp-fab::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed rgba(247, 243, 235, .55);
+  border-radius: inherit;
+}
+.rsvp-fab.is-visible { opacity: 1; translate: 0 0; pointer-events: auto; }
+
+
+/* --- embroidery appears as it scrolls into view (scroll-driven, no JS;
+       anything fully on screen is always fully visible) --- */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .motif {
+      animation: stitch-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+@keyframes stitch-in {
+  from { opacity: 0; transform: translateY(16px) scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope, .scene-hint { animation: none; }
+  .rsvp-fab { transition: none; }
+}
+
+
+/* =====================================================================
+   Wider screens: the same suite, set on a bigger table
+   ===================================================================== */
+@media (min-width: 600px) {
+  :root { --gutter: 24px; }
+  .families { margin-inline: 0; padding-inline: 5.5rem; }
+  .garland { width: 88px; }
+  .garland--left { left: 0; }
+  .garland--right { right: 0; }
+  .countdown { margin-inline: auto; }
+  .suite > .details { margin-inline: 0; }
+  .details-panel { border-radius: 3px; padding-inline: 1.6rem; }
+  .scene-sprig--top { width: 330px; left: 2vw; top: 2vh; }
+  .scene-sprig--bottom { width: 300px; right: 2vw; bottom: 2vh; }
+}
+
+/* Laptops: keep the embroidered sprigs on the table beside the column,
+   in exactly the spots they sit on the envelope screen. */
+.table-decor { display: none; }
+@media (min-width: 1000px) {
+  .table-decor {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .table-sprig {
+    position: absolute;
+    filter: drop-shadow(0 2px 3px rgba(var(--shadow), .2));
+  }
+  .table-sprig--top { width: 330px; left: 2vw; top: 2vh; rotate: -4deg; }
+  .table-sprig--bottom { width: 300px; right: 2vw; bottom: 2vh; rotate: 180deg; }
+  .suite { position: relative; z-index: 1; }
+}

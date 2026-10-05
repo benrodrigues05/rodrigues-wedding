@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Benjamin and Talisha//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:wedding-20270306@rodrigues-wedding
+DTSTAMP:20261006T000000Z
+DTSTART:20270306T130000Z
+DTEND:20270306T210000Z
+SUMMARY:Benjamin & Talisha's Wedding
+LOCATION:Orchid House\, Collisheen Estate\, Esenembi Road\, Ballito
+DESCRIPTION:Ceremony at 3pm in the chapel at Orchid House\, with the recep
+ tion to follow. https://benrodrigues05.github.io/rodrigues-wedding/
+URL:https://benrodrigues05.github.io/rodrigues-wedding/
+END:VEVENT
+END:VCALENDAR
