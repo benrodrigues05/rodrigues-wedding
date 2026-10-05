@@ -52,6 +52,26 @@ Ballito. Their web copies are in `source/retired/`.
 | fern and orchid envelope liner (opaque) | 4814aa59-816c-4ec1-89b7-f89166a41899 |
 | guest cottage | d7332d27-370f-46b5-b9f7-634fd184c651 |
 
+### Coastal flowers (6 October 2026, second pass)
+
+Every floral piece was redrawn in bright coastal colour to match the dress
+code. The orchid and fern versions (cover arch, corner sprays, garland, fern
+frond, orchid stamp, liner, cake, gramophone, bedside vase) and the gold
+accessories are in `source/retired/`.
+
+| Asset | Higgsfield job |
+|---|---|
+| cover arch frame (`source/arch-frame.png`) | 4ddf2bc5-f72f-4261-9f80-a0556298d008 |
+| corner spray (bougainvillea, hibiscus) | 901627f8-8150-4771-b4d1-e4e26cd7245a |
+| corner spray (bird-of-paradise) | 74ceec87-e08a-4a3c-8d32-68e75864ba41 |
+| side garland | a3133a8c-e4c6-4005-890e-28662067cffc |
+| frangipani sprig (envelope, dress code) | dad11651-4935-4bc1-8df4-d6d7b72ab23e |
+| bird-of-paradise stamp | 45ddc074-53e7-42ff-b867-ad59a76c9180 |
+| envelope liner (opaque) | a5aebb7c-bf6e-416e-b54b-6bfa6336e188 |
+| wedding cake | 04b0efcb-1cc2-42e2-84d3-67aafc990b3a |
+| gramophone (playlist) | 8ef3ca4e-8144-450b-9055-242d29804314 |
+| bedside table with vase | 78fa2c60-ea39-4a05-b423-ef9b52973b30 |
+
 Made by code rather than generated: the envelope, postmark, napkin fringe
 (`fringe.svg`), paper grain, stitching, link-preview image (`og.jpg`, a
 screenshot of the envelope) and the icons (the wax seal on paper).

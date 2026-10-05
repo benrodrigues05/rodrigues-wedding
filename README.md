@@ -27,17 +27,19 @@ To look at it locally, open `site/index.html` in a browser.
 ## The details on the invite
 
 - Benjamin Rodrigues & Talisha Grobler
-- Saturday 6 March 2027, ceremony 3:00 pm (South African time)
+- Saturday 6 March 2027 (South African time)
 - The chapel at Orchid House, Collisheen Estate, Esenembi Road, Ballito
-- Reception at Orchid House after the ceremony, until 11:00 pm
+- Running order: guests arrive 2:00 pm, ceremony 3:00 pm, reception and
+  dinner to follow (times to come), carriages 11:00 pm
 - RSVP by 1 December 2026
 - No plus-ones: each invitation is for the person, couple or family it's
   addressed to, and one reply covers all of them
 - Dress code: Garden Formal, bold colour (terracotta, marigold, chartreuse,
-  emerald, fuchsia, plum), please avoid white
+  emerald, fuchsia, plum), please avoid white; a pop of colour (tie, bow tie,
+  hat, fascinator, scarf) is fine for anyone not buying something new
 - Where to stay: Regal Inn Ballito, La Residence, Vallen Lodge, plus a link to
   more on LekkeSlaap (prices checked October 2026)
-- The calendar file and Google link run 3 pm to 11 pm
+- The calendar file and Google link run 2 pm (arrival) to 11 pm
 
 ## RSVPs
 
