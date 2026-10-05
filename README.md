@@ -3,8 +3,8 @@
 A phone-first wedding invitation website. Guests see a sealed envelope with a
 stamp and a wax seal. One tap turns it over, breaks the seal, slides the letter
 out and unfolds it into the invitation. Below it: a live countdown, the
-details, the venue, dress code, where to stay, getting there, and an RSVP
-reply card.
+details, the venue, dress code, where to stay, getting there, an RSVP reply
+card, and a playlist card where guests suggest songs.
 
 **Live:** https://benrodrigues05.github.io/rodrigues-wedding/
 
@@ -29,12 +29,15 @@ To look at it locally, open `site/index.html` in a browser.
 - Benjamin Rodrigues & Talisha Grobler
 - Saturday 6 March 2027, ceremony 3:00 pm (South African time)
 - The chapel at Orchid House, Collisheen Estate, Esenembi Road, Ballito
-- Reception at Orchid House, "to follow"
+- Reception at Orchid House after the ceremony, until 11:00 pm
+- RSVP by 1 December 2026
+- No plus-ones: each invitation is for the person, couple or family it's
+  addressed to, and one reply covers all of them
 - Dress code: Garden Formal, bold colour (terracotta, marigold, chartreuse,
   emerald, fuchsia, plum), please avoid white
 - Where to stay: Regal Inn Ballito, La Residence, Vallen Lodge, plus a link to
   more on LekkeSlaap (prices checked October 2026)
-- The calendar file and Google link assume the day runs 3 pm to 11 pm
+- The calendar file and Google link run 3 pm to 11 pm
 
 ## RSVPs
 
@@ -43,9 +46,14 @@ Formspree dashboard. If sending ever fails, guests are shown Ben's email as a
 one-tap backup (it's stored in two halves in the page so spam bots don't pick
 it up).
 
-Each reply contains: name(s), joyfully accepts or regretfully declines, number
-of guests (1–4), dietary requirements, a song request, email and a note.
-People who decline only send their name, answer, email and note.
+Each reply contains: the invitation it came from (the `?to=` name on the
+link), name(s), joyfully accepts or regretfully declines, dietary
+requirements, email and a note. People who decline don't send dietary
+requirements.
+
+Playlist suggestions arrive in the same inbox with the subject
+"Song request": one or two songs, who suggested them, and the invitation they
+came from. They count towards the same monthly Formspree allowance.
 
 Two things that cause silent problems:
 
@@ -57,11 +65,13 @@ Two things that cause silent problems:
 
 ## Personal links
 
-Add `?to=` to the link and the envelope is addressed to that guest. Their name
-is also filled into the RSVP card.
+Send every invited person, couple or family their own link. Add `?to=` to the
+link and the envelope is addressed to them, their name is filled into the RSVP
+and playlist cards, and every reply records which invitation it came from.
 
 ```
 https://benrodrigues05.github.io/rodrigues-wedding/?to=Sarah%20%26%20James
+https://benrodrigues05.github.io/rodrigues-wedding/?to=The%20Smith%20Family
 ```
 
 (`%20` is a space and `%26` is `&`.) Without it the envelope reads
