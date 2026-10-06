@@ -12,13 +12,14 @@
     inOut: 'cubic-bezier(.65, 0, .35, 1)'
   };
 
-  // A personal link like  ?to=Sarah%20%26%20James  writes their names on the envelope.
+  // A personal link like  ?to=Sarah%20%26%20James&seats=2  writes their names on
+  // the envelope and says how many people the invitation is for.
   var guest = readGuestName();
+  var seats = readSeats();
 
   safely(initEnvelope, revealNow);
   safely(initCountdown);
   safely(initRsvp);
-  safely(initPlaylist);
   safely(initFab);
   window.__inviteReady = true;
 
@@ -307,7 +308,7 @@
 
 
   /* ------------------------------------------------------------------ */
-  /* Forms: the RSVP card and the playlist (both post to Formspree)       */
+  /* The RSVP card (posts to Formspree)                                   */
   /* ------------------------------------------------------------------ */
 
   // Shared set-up for a form that posts to Formspree.
@@ -377,12 +378,31 @@
         problem = byId('rsvp-problem'), submit = byId('rsvp-submit'),
         submitLabel = byId('rsvp-submit-label'), done = byId('rsvp-done'),
         doneName = byId('done-name'), doneMessage = byId('done-message'),
-        donePlaylist = byId('done-playlist'), edit = byId('rsvp-edit'),
-        previewNote = byId('preview-note');
+        edit = byId('rsvp-edit'), previewNote = byId('preview-note'),
+        guestsField = byId('rsvp-guests-field'), guestsSelect = byId('rsvp-guests'),
+        guestsHint = byId('rsvp-guests-hint'), invited = byId('rsvp-invited');
     var STORE_KEY = 'wedding-rsvp';
 
     if (!sender.live) previewNote.hidden = false;
     if (guest && !nameInput.value) nameInput.value = guest;
+
+    // "How many of you?" offers 1 up to the number on the invitation, so nobody
+    // can add extra people. A link without &seats= allows up to 2.
+    var max = seats || 2;
+    guestsSelect.textContent = '';
+    for (var i = 1; i <= max; i++) {
+      var opt = document.createElement('option');
+      opt.textContent = String(i);
+      guestsSelect.appendChild(opt);
+    }
+    guestsSelect.value = String(max);
+    invited.value = seats ? String(seats) : '';
+    if (max === 1) {
+      guestsField.hidden = true;
+    } else if (seats) {
+      guestsHint.textContent = 'Your invitation is for ' + seats + '. If only some of you can come, tell us who in the note below.';
+      guestsHint.hidden = false;
+    }
 
     var saved = load();
     if (saved && saved.name) showDone(saved, false);
@@ -413,16 +433,18 @@
       var coming = choice.value === 'Joyfully accepts';
       subject.value = 'RSVP: ' + name + (coming ? ' (coming)' : ' (not coming)');
       var data = new FormData(form);
-      if (!coming) data.delete('dietary');
+      if (!coming) ['guests', 'dietary', 'song_1', 'song_2'].forEach(function (k) { data.delete(k); });
+      var songs = coming && (data.get('song_1') || data.get('song_2'));
 
       busy(true);
       sender.send(data).then(function () {
-        var reply = { name: name, coming: coming, preview: !sender.live };
+        var reply = { name: name, coming: coming, songs: !!songs, preview: !sender.live };
         save(reply);
         showDone(reply, true);
       }, function () {
         showSendProblem(problem, sender, 'reply', 'RSVP: ' + name, summarise(data, {
-          invitation: 'Invitation', name: 'Name', attending: 'Reply', dietary: 'Dietary', email: 'Email', message: 'Note'
+          invitation: 'Invitation', invited: 'Invited', name: 'Name', attending: 'Reply', guests: 'Coming',
+          dietary: 'Dietary', email: 'Email', message: 'Note', song_1: 'Song', song_2: 'Another song'
         }));
       }).then(function () { busy(false); });
     });
@@ -438,8 +460,8 @@
       doneMessage.textContent = reply.coming
         ? 'We can’t wait to celebrate with you.'
         : 'You’ll be missed. Thank you for letting us know.';
+      if (reply.songs) doneMessage.textContent += ' Your songs are on our list.';
       if (reply.preview) doneMessage.textContent += ' (Preview only, so nothing was sent.)';
-      donePlaylist.hidden = !reply.coming;
       form.hidden = true;
       done.hidden = false;
       if (moveFocus) done.focus();
@@ -459,79 +481,20 @@
     }
   }
 
-  function initPlaylist() {
-    var form = byId('playlist-form');
-    if (!form) return;
-    var sender = formSender(form);
-
-    var song1 = byId('song-1'), song2 = byId('song-2'), song1Error = byId('song-1-error'),
-        who = byId('song-name'), subject = byId('playlist-subject'),
-        problem = byId('playlist-problem'), submit = byId('playlist-submit'),
-        submitLabel = byId('playlist-submit-label'), done = byId('playlist-done'),
-        doneMessage = byId('playlist-done-message'), again = byId('playlist-again'),
-        previewNote = byId('playlist-preview-note');
-
-    if (!sender.live) previewNote.hidden = false;
-    if (guest && !who.value) who.value = guest;
-    song1.addEventListener('input', function () { clearError(song1, song1Error); });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (submit.disabled) return;
-      problem.hidden = true;
-      if (!song1.value.trim()) {
-        showError(song1, song1Error, 'Add a song first, with the artist if you know it.');
-        song1.focus();
-        return;
-      }
-      var name = who.value.replace(/\s+/g, ' ').trim();
-      subject.value = 'Song request' + (name ? ': ' + name : '');
-      var data = new FormData(form);
-
-      busy(true);
-      sender.send(data).then(function () {
-        doneMessage.textContent = 'Thank you' + (name ? ', ' + name : '') + '. It’s on our list.' +
-          (sender.live ? '' : ' (Preview only, so nothing was sent.)');
-        form.hidden = true;
-        done.hidden = false;
-        done.focus();
-      }, function () {
-        showSendProblem(problem, sender, 'suggestion', subject.value, summarise(data, {
-          song_1: 'Song', song_2: 'Another song', name: 'From'
-        }));
-      }).then(function () { busy(false); });
-    });
-
-    again.addEventListener('click', function () {
-      song1.value = '';
-      song2.value = '';
-      done.hidden = true;
-      form.hidden = false;
-      song1.focus();
-    });
-
-    function busy(on) {
-      submit.disabled = on;
-      submitLabel.textContent = on ? 'Adding…' : 'Add to the playlist';
-    }
-  }
-
-
   /* ------------------------------------------------------------------ */
   /* Floating RSVP shortcut                                               */
   /* ------------------------------------------------------------------ */
 
   function initFab() {
-    var fab = byId('rsvp-fab'), hero = byId('top'), rsvp = byId('rsvp'), playlist = byId('playlist');
+    var fab = byId('rsvp-fab'), hero = byId('top'), rsvp = byId('rsvp');
     if (!fab || !hero || !rsvp || !('IntersectionObserver' in window)) return;
-    var inView = { top: true, rsvp: false, playlist: false };
+    var inView = { top: true, rsvp: false };
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) { inView[en.target.id] = en.isIntersecting; });
-      fab.classList.toggle('is-visible', !inView.top && !inView.rsvp && !inView.playlist);
+      fab.classList.toggle('is-visible', !inView.top && !inView.rsvp);
     });
     io.observe(hero);
     io.observe(rsvp);
-    if (playlist) io.observe(playlist);
   }
 
 
@@ -544,6 +507,13 @@
       var v = new URLSearchParams(window.location.search).get('to') || '';
       return v.replace(/\s+/g, ' ').trim().slice(0, 70);
     } catch (e) { return ''; }
+  }
+
+  function readSeats() {
+    try {
+      var n = parseInt(new URLSearchParams(window.location.search).get('seats'), 10);
+      return n >= 1 && n <= 12 ? n : 0;
+    } catch (e) { return 0; }
   }
 
   function safely(fn, onError) {

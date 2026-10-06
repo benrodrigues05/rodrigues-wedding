@@ -26,9 +26,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&amp;display=block">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;display=swap">
 <link rel="preload" as="image" href="assets/hero-arch.webp?v=c3e23fb2" type="image/webp">
-<link rel="stylesheet" href="styles.css?v=4a9dcc30">
+<link rel="stylesheet" href="styles.css?v=2fb17304">
 <script>
-  /* Show the envelope only when JavaScript is running. If script.js?v=0f5ac863 fails to
+  /* Show the envelope only when JavaScript is running. If script.js?v=7232be33 fails to
      load or errors, the invitation is revealed instead of staying sealed. */
   (function (d) {
     var h = d.documentElement;
@@ -40,11 +40,11 @@
     });
   })(document);
 </script>
-<script src="script.js?v=0f5ac863" defer></script>
+<script src="script.js?v=7232be33" defer></script>
 </head>
 <body>
 
-<!-- ============ THE ENVELOPE (shown first, opened by script.js?v=0f5ac863) ============ -->
+<!-- ============ THE ENVELOPE (shown first, opened by script.js?v=7232be33) ============ -->
 <div class="scene" id="scene">
   <div class="scene-vignette" id="scene-vignette"></div>
   <img class="scene-sprig scene-sprig--top" src="assets/coastal-corner.webp?v=b234eb41" width="600" height="652" alt="">
@@ -300,6 +300,7 @@
         <input type="hidden" name="_subject" id="rsvp-subject" value="Wedding RSVP">
         <input type="hidden" name="form" value="RSVP">
         <input type="hidden" name="invitation" class="invitation-field" value="">
+        <input type="hidden" name="invited" id="rsvp-invited" value="">
 
         <div class="field">
           <label for="rsvp-name">Your name(s)</label>
@@ -315,6 +316,14 @@
         </fieldset>
 
         <div class="if-attending">
+          <div class="field" id="rsvp-guests-field">
+            <label for="rsvp-guests">How many of you will be there?</label>
+            <select id="rsvp-guests" name="guests">
+              <option>1</option><option>2</option>
+            </select>
+            <p class="field-hint" id="rsvp-guests-hint" hidden></p>
+          </div>
+
           <div class="field">
             <label for="rsvp-diet">Dietary requirements</label>
             <input id="rsvp-diet" name="dietary" type="text" placeholder="Allergies, vegetarian, vegan…">
@@ -331,6 +340,20 @@
           <textarea id="rsvp-note" name="message" rows="3"></textarea>
         </div>
 
+        <div class="if-attending playlist-block">
+          <img class="playlist-gramophone" src="assets/gramophone.webp?v=2d4e3658" width="640" height="900" alt="" loading="lazy" decoding="async">
+          <p class="script-sub playlist-title">For the playlist</p>
+          <p class="playlist-lede">Which songs will get you on the dance floor?</p>
+          <div class="field">
+            <label for="song-1">A song <span class="optional">optional</span></label>
+            <input id="song-1" name="song_1" type="text" placeholder="Song and artist">
+          </div>
+          <div class="field">
+            <label for="song-2">And another <span class="optional">optional</span></label>
+            <input id="song-2" name="song_2" type="text" placeholder="Song and artist">
+          </div>
+        </div>
+
         <div class="form-problem" id="rsvp-problem" role="alert" hidden></div>
 
         <button class="send" type="submit" id="rsvp-submit"><span id="rsvp-submit-label">Send reply</span></button>
@@ -341,52 +364,7 @@
         <img class="done-seal" src="assets/seal.webp?v=17709065" width="360" height="391" alt="">
         <p class="script-title done-title">Thank you, <span id="done-name"></span></p>
         <p class="lede" id="done-message"></p>
-        <a class="text-link" id="done-playlist" href="#playlist" hidden>Add a song to the playlist</a>
         <button class="text-link text-button" type="button" id="rsvp-edit">Change my reply</button>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ============ 9. THE PLAYLIST (fringed napkin) ============ -->
-  <section class="playlist" id="playlist" aria-labelledby="playlist-title">
-    <div class="napkin napkin--playlist">
-      <img class="motif gramophone" src="assets/gramophone.webp?v=2d4e3658" width="640" height="900" alt="" loading="lazy" decoding="async">
-      <h2 class="script-title" id="playlist-title">The Playlist</h2>
-      <p class="lede">Which songs get you on the dance floor? Suggest one or two for our wedding playlist.</p>
-
-      <form class="rsvp-form playlist-form" id="playlist-form" action="https://formspree.io/f/mkjogwgd" method="POST" data-fallback-user="benrodrigues05" data-fallback-domain="gmail.com">
-        <input class="hp" type="text" name="_gotcha" id="playlist-gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <input type="hidden" name="_subject" id="playlist-subject" value="Song request">
-        <input type="hidden" name="form" value="Playlist">
-        <input type="hidden" name="invitation" class="invitation-field" value="">
-
-        <div class="field">
-          <label for="song-1">A song</label>
-          <input id="song-1" name="song_1" type="text" placeholder="Song and artist" required aria-describedby="song-1-error">
-          <p class="field-error" id="song-1-error" hidden></p>
-        </div>
-
-        <div class="field">
-          <label for="song-2">And another <span class="optional">optional</span></label>
-          <input id="song-2" name="song_2" type="text" placeholder="Song and artist">
-        </div>
-
-        <div class="field">
-          <label for="song-name">From <span class="optional">your name, optional</span></label>
-          <input id="song-name" name="name" type="text" autocomplete="name">
-        </div>
-
-        <div class="form-problem" id="playlist-problem" role="alert" hidden></div>
-
-        <button class="send" type="submit" id="playlist-submit"><span id="playlist-submit-label">Add to the playlist</span></button>
-        <p class="preview-note" id="playlist-preview-note" hidden>Preview only. Suggestions aren&rsquo;t sent anywhere until the inbox is connected.</p>
-      </form>
-
-      <div class="reply-done" id="playlist-done" tabindex="-1" hidden>
-        <p class="script-title done-title">Added to the playlist</p>
-        <p class="lede" id="playlist-done-message"></p>
-        <button class="text-link text-button" type="button" id="playlist-again">Suggest another</button>
       </div>
     </div>
   </section>

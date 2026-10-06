@@ -3,8 +3,8 @@
 A phone-first wedding invitation website. Guests see a sealed envelope with a
 stamp and a wax seal. One tap turns it over, breaks the seal, slides the letter
 out and unfolds it into the invitation. Below it: a live countdown, the
-details, the venue, dress code, where to stay, getting there, an RSVP reply
-card, and a playlist card where guests suggest songs.
+venue, the running order of the day, dress code, where to stay, getting there,
+and an RSVP reply card (which also collects song suggestions).
 
 **Live:** https://benrodrigues05.github.io/rodrigues-wedding/
 
@@ -33,7 +33,8 @@ To look at it locally, open `site/index.html` in a browser.
   dinner to follow (times to come), carriages 11:00 pm
 - RSVP by 1 December 2026
 - No plus-ones: each invitation is for the person, couple or family it's
-  addressed to, and one reply covers all of them
+  addressed to. One reply covers all of them, and "how many of you will be
+  there?" only goes up to the number on their invitation
 - Dress code: Garden Formal, bold colour (terracotta, marigold, chartreuse,
   emerald, fuchsia, plum), please avoid white; a pop of colour (tie, bow tie,
   hat, fascinator, scarf) is fine for anyone not buying something new
@@ -48,14 +49,10 @@ Formspree dashboard. If sending ever fails, guests are shown Ben's email as a
 one-tap backup (it's stored in two halves in the page so spam bots don't pick
 it up).
 
-Each reply contains: the invitation it came from (the `?to=` name on the
-link), name(s), joyfully accepts or regretfully declines, dietary
-requirements, email and a note. People who decline don't send dietary
-requirements.
-
-Playlist suggestions arrive in the same inbox with the subject
-"Song request": one or two songs, who suggested them, and the invitation they
-came from. They count towards the same monthly Formspree allowance.
+Each reply contains: the invitation it came from and how many people it was
+for, name(s), joyfully accepts or regretfully declines, how many are coming,
+dietary requirements, email, a note, and up to two songs for the playlist.
+People who decline only send their name, answer, email and note.
 
 Two things that cause silent problems:
 
@@ -67,18 +64,34 @@ Two things that cause silent problems:
 
 ## Personal links
 
-Send every invited person, couple or family their own link. Add `?to=` to the
-link and the envelope is addressed to them, their name is filled into the RSVP
-and playlist cards, and every reply records which invitation it came from.
+Every invited person, couple or family gets their own link. Make them on the
+private link maker (not linked from the invitation):
+
+**https://benrodrigues05.github.io/rodrigues-wedding/links.html**
+
+Paste the guest list, one invitation per line, as `names, number of people`:
 
 ```
-https://benrodrigues05.github.io/rodrigues-wedding/?to=Sarah%20%26%20James
-https://benrodrigues05.github.io/rodrigues-wedding/?to=The%20Smith%20Family
+Sarah & James, 2
+The Smith Family, 4
+Gran Rose, 1
 ```
 
-(`%20` is a space and `%26` is `&`.) Without it the envelope reads
-"To our favourite people". Links ending in `#rsvp` skip the envelope and jump
-straight to the reply card, which is handy for reminders.
+Each line gets its own link with Copy, Send on WhatsApp and Preview buttons.
+The list and the WhatsApp message are remembered on that phone or laptop.
+
+A link looks like
+`https://benrodrigues05.github.io/rodrigues-wedding/?to=The%20Smith%20Family&seats=4`:
+
+- `to` is the name on the envelope; it's also filled into the RSVP and recorded
+  with every reply
+- `seats` is how many people the invitation is for; the RSVP offers 1 up to that
+  number, and hides the question when it's 1
+- a link without `seats` allows up to 2; the plain link without `to` reads
+  "To our favourite people"
+
+Links ending in `#rsvp` skip the envelope and jump straight to the reply card,
+which is handy for reminders.
 
 ## Updating the live site
 

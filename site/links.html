@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Invitation Links · Benjamin &amp; Talisha</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light only">
+<link rel="icon" type="image/png" href="assets/icon-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&amp;family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;display=swap">
+<style>
+  /* A private helper for Ben and Talisha: turn the guest list into personal
+     invitation links. Not linked from the invitation itself. */
+  :root {
+    --linen: #E8E3D7;
+    --paper: #F7F3EB;
+    --ink: #2E2C27;
+    --ink-soft: #57534A;
+    --ink-faint: #8B8578;
+    --sage-deep: #44593F;
+    --line: rgba(46, 44, 39, .2);
+    --font-script: "Pinyon Script", "Snell Roundhand", cursive;
+    --font-serif: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: max(20px, env(safe-area-inset-top)) 16px 48px;
+    background: var(--linen) url("assets/linen.webp") 0 0 / 450px 450px;
+    color: var(--ink);
+    font: 500 1.15rem/1.5 var(--font-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 40rem; margin: 0 auto; display: grid; gap: 1.2rem; }
+  h1 { margin: .4rem 0 0; font: 400 clamp(2.4rem, 11vw, 3.2rem)/1.1 var(--font-script); text-align: center; }
+  .intro { margin: 0; text-align: center; font-style: italic; color: var(--ink-soft); text-wrap: balance; }
+  .card {
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 1.3rem 1.1rem;
+    box-shadow: 0 1px 1px rgba(60, 50, 35, .1), 0 14px 30px -22px rgba(60, 50, 35, .6);
+    display: grid;
+    gap: .55rem;
+  }
+  label, .label {
+    font: 600 .72rem/1.4 var(--font-serif);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  textarea {
+    width: 100%;
+    min-height: 9rem;
+    padding: .7rem .8rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: #fff;
+    font: 500 1.1rem/1.5 var(--font-serif);
+    color: var(--ink);
+    resize: vertical;
+  }
+  textarea:focus { outline: 2px solid var(--sage-deep); outline-offset: 1px; }
+  .hint { margin: 0; font-size: 1rem; font-style: italic; color: var(--ink-faint); }
+  .row { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+  button, .btn {
+    appearance: none;
+    border: 1px solid var(--sage-deep);
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    background: transparent;
+    color: var(--sage-deep);
+    font: 600 .74rem/1 var(--font-serif);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+  button.primary, .btn.primary { background: var(--sage-deep); color: var(--paper); }
+  button:focus-visible, .btn:focus-visible { outline: 2px solid var(--sage-deep); outline-offset: 3px; }
+  .count { margin: 0; font-size: 1rem; color: var(--ink-soft); }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+  .invite { padding: 1rem 1.1rem; display: grid; gap: .45rem; }
+  .invite h2 { margin: 0; font: 400 1.9rem/1.1 var(--font-script); }
+  .invite .for { margin: 0; font: 600 .72rem/1.4 var(--font-serif); letter-spacing: .18em; text-transform: uppercase; color: var(--sage-deep); }
+  .invite .url {
+    margin: 0;
+    padding: .45rem .6rem;
+    border-radius: 3px;
+    background: rgba(46, 44, 39, .05);
+    font: 500 .95rem/1.35 ui-monospace, Menlo, monospace;
+    word-break: break-all;
+    user-select: all;
+  }
+  .empty { margin: 0; text-align: center; font-style: italic; color: var(--ink-faint); }
+  .toast { margin: 0; min-height: 1.4em; text-align: center; font-style: italic; color: var(--sage-deep); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Invitation links</h1>
+  <p class="intro">One link per couple, family or person. Their names go on the envelope, and their RSVP only lets them choose up to the number of people you put here.</p>
+
+  <section class="card" aria-labelledby="list-label">
+    <label id="list-label" for="guests">Your guest list</label>
+    <textarea id="guests" spellcheck="false" placeholder="Sarah &amp; James, 2&#10;The Smith Family, 4&#10;Gran Rose, 1"></textarea>
+    <p class="hint">One invitation per line: the names as they should appear on the envelope, a comma, then how many people it&rsquo;s for. The list is remembered on this device.</p>
+  </section>
+
+  <section class="card" aria-labelledby="message-label">
+    <label id="message-label" for="message">WhatsApp message</label>
+    <textarea id="message" style="min-height:6rem"></textarea>
+    <p class="hint">{name} and {link} are filled in for each invitation. You can still edit it in WhatsApp before sending.</p>
+  </section>
+
+  <div class="row" style="justify-content:space-between">
+    <p class="count" id="count"></p>
+    <button type="button" id="copy-all">Copy all links</button>
+  </div>
+  <p class="toast" id="toast" role="status" aria-live="polite"></p>
+  <ul id="list"></ul>
+  <p class="empty" id="empty">Your links will appear here.</p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var BASE = new URL('./', window.location.href).href;
+  var DEFAULT_MESSAGE = 'Hi {name}! You’re invited to our wedding on Saturday 6 March 2027. Tap to open your invitation: {link}';
+  var guests = document.getElementById('guests');
+  var message = document.getElementById('message');
+  var list = document.getElementById('list');
+  var empty = document.getElementById('empty');
+  var count = document.getElementById('count');
+  var toast = document.getElementById('toast');
+  var current = [];
+
+  guests.value = load('invite-links-guests', '');
+  message.value = load('invite-links-message', DEFAULT_MESSAGE);
+  render();
+  guests.addEventListener('input', function () { save('invite-links-guests', guests.value); render(); });
+  message.addEventListener('input', function () { save('invite-links-message', message.value); render(); });
+
+  document.getElementById('copy-all').addEventListener('click', function () {
+    if (!current.length) return say('Add some names first.');
+    copy(current.map(function (g) { return g.name + ' (' + g.seats + ')\t' + g.link; }).join('\n'), 'All ' + current.length + ' links copied.');
+  });
+
+  function parse(text) {
+    return text.split('\n').map(function (line) {
+      line = line.trim();
+      if (!line) return null;
+      var m = line.match(/^(.*?)[,\s]+(\d{1,2})\s*$/);
+      var name = (m ? m[1] : line).replace(/[,\s]+$/, '').trim();
+      var seats = m ? parseInt(m[2], 10) : (/&| and /i.test(name) ? 2 : 1);
+      if (!name) return null;
+      seats = Math.max(1, Math.min(12, seats));
+      var link = BASE + '?to=' + encodeURIComponent(name) + '&seats=' + seats;
+      return { name: name, seats: seats, link: link };
+    }).filter(Boolean);
+  }
+
+  function render() {
+    current = parse(guests.value);
+    list.textContent = '';
+    empty.hidden = current.length > 0;
+    count.textContent = current.length ? current.length + (current.length === 1 ? ' invitation, ' : ' invitations, ') +
+      current.reduce(function (n, g) { return n + g.seats; }, 0) + ' people' : '';
+    current.forEach(function (g) {
+      var li = el('li', 'card invite');
+      li.appendChild(el('h2', '', g.name));
+      li.appendChild(el('p', 'for', 'For ' + g.seats + (g.seats === 1 ? ' person' : ' people')));
+      li.appendChild(el('p', 'url', g.link));
+      var row = el('div', 'row');
+      var copyBtn = el('button', 'primary', 'Copy link');
+      copyBtn.type = 'button';
+      copyBtn.addEventListener('click', function () { copy(g.link, 'Link for ' + g.name + ' copied.'); });
+      var wa = el('a', 'btn', 'Send on WhatsApp');
+      wa.href = 'https://wa.me/?text=' + encodeURIComponent(message.value.split('{name}').join(g.name).split('{link}').join(g.link));
+      wa.target = '_blank';
+      wa.rel = 'noopener';
+      var open = el('a', 'btn', 'Preview');
+      open.href = g.link;
+      open.target = '_blank';
+      open.rel = 'noopener';
+      row.appendChild(copyBtn);
+      row.appendChild(wa);
+      row.appendChild(open);
+      li.appendChild(row);
+      list.appendChild(li);
+    });
+  }
+
+  function copy(text, done) {
+    var fallback = function () {
+      var area = document.createElement('textarea');
+      area.value = text;
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand('copy'); say(done); } catch (e) { say('Press and hold the link to copy it.'); }
+      document.body.removeChild(area);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(done); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function say(text) {
+    toast.textContent = text;
+    clearTimeout(say.t);
+    say.t = setTimeout(function () { toast.textContent = ''; }, 2600);
+  }
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  function load(key, fallback) {
+    try { var v = localStorage.getItem(key); return v === null ? fallback : v; } catch (e) { return fallback; }
+  }
+
+  function save(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private mode */ }
+  }
+})();
+</script>
+</body>
+</html>

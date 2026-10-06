@@ -233,7 +233,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   filter: drop-shadow(0 2px 2.5px rgba(var(--shadow), .35));
 }
 
-/* --- the folded letter (geometry is set by script.js?v=0f5ac863) --- */
+/* --- the folded letter (geometry is set by script.js?v=7232be33) --- */
 .letter {
   position: absolute;
   z-index: 3;
@@ -934,6 +934,12 @@ html.js:not(.is-open) body { overflow: hidden; }
   box-shadow: 0 1px 0 var(--sage-deep);
 }
 .field [aria-invalid="true"] { border-bottom-color: var(--error); }
+.field-hint {
+  margin: .35rem 0 0;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--ink-faint);
+}
 .field-error {
   margin: .35rem 0 0;
   font-size: 1rem;
@@ -991,6 +997,14 @@ html.js:not(.is-open) body { overflow: hidden; }
 .choice-text { font: 400 1.6rem/1.1 var(--font-script); color: var(--ink); }
 .choice--small .choice-text { font-size: 1.45rem; }
 
+.playlist-block {               /* song suggestions at the foot of the reply card */
+  padding-top: 1.5rem;
+  border-top: 1px dashed rgba(93, 106, 77, .35);
+}
+.playlist-gramophone { justify-self: center; width: 86px; margin-bottom: -.7rem; }
+.playlist-title { text-align: center; font-size: clamp(1.8rem, 7.6vw, 2.2rem); }
+.playlist-lede { margin: -1.1rem 0 0; text-align: center; font-style: italic; color: var(--ink-soft); }
+
 .form-problem {
   padding: .9rem 1rem;
   border-left: 2px solid var(--error);
@@ -1045,19 +1059,13 @@ html.js:not(.is-open) body { overflow: hidden; }
 .reply-done .lede { max-width: 26ch; }
 
 
-/* --- 9. the playlist --- */
-.playlist .gramophone { width: 58%; max-width: 15rem; margin: -.6rem auto .6rem; }
-.playlist .lede { max-width: 28ch; margin-block: .7rem 1.6rem; }
-.playlist .reply-done { padding-block: .4rem .2rem; }
-
-
 /* --- closing --- */
 .closing { display: grid; justify-items: center; gap: .4rem; }
 .closing-seal { width: 64px; margin-bottom: .6rem; filter: drop-shadow(0 2px 3px rgba(var(--shadow), .3)); }
 .closing-names { margin: 0 0 .5rem; font: 400 var(--fs-title)/1.1 var(--font-script); }
 
 
-/* --- floating RSVP shortcut (shown by script.js?v=0f5ac863 once you scroll) --- */
+/* --- floating RSVP shortcut (shown by script.js?v=7232be33 once you scroll) --- */
 .rsvp-fab {
   position: fixed;
   z-index: 40;
