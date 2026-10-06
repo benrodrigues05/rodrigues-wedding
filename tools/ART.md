@@ -92,6 +92,26 @@ the job IDs in the previous table.
 | `gramophone` | fa60bf45-e1c9-4e54-b3d1-556cc83b3099 |
 | `nightstand` | 83ac51de-d077-48ba-b422-2b78f8058e8c |
 
+### Hydrangeas and baby's breath (6 October 2026, fourth pass)
+
+Ben swapped the hibiscus and other island flowers for soft dusty-blue and
+white hydrangeas with baby's breath, kept just as sparse. These are the
+current versions; the coastal flower files were renamed to `floral-*`.
+
+| Asset | Higgsfield job |
+|---|---|
+| cover arch frame (`source/arch-frame.png`) | c425c75a-51fb-430f-bec1-c66828d3669e |
+| `floral-corner` | 85862f6e-fe3d-486a-85eb-eaef1e58d03a |
+| `floral-spray` | c870a97c-ddce-48a0-8515-90b5addb3367 |
+| `floral-garland` | 93aba5ed-5127-4664-81bb-08f878bf488c |
+| `floral-sprig` | 85cba609-d305-4f4f-9790-2893b9e149e0 |
+| `stamp` | f35301d3-de0e-4669-be16-1d8d4992de67 |
+| `liner` (opaque) | 15f06249-b2fb-48ad-9b68-5652e7f2ac68 |
+| `cake` | a94213b9-fdeb-47b5-af97-487a785f5e2c |
+| `gramophone` | c95682e0-c160-47f3-a167-ba5438be66a4 |
+| `nightstand` | f6eb6d45-f936-41d4-a375-ff825b71682c |
+| `cottage` (hydrangea bushes) | 1d6a57cc-ba7d-491e-9840-0c3b8a47a839 |
+
 Made by code rather than generated: the envelope, postmark, napkin fringe
 (`fringe.svg`), paper grain, stitching, link-preview image (`og.jpg`, a
 screenshot of the envelope) and the icons (the wax seal on paper).

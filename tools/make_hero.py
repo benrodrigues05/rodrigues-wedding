@@ -58,7 +58,7 @@ def main():
     y0, y1, x0, x1 = box[0].min(), box[0].max(), box[1].min(), box[1].max()
     hero = hero.crop((max(x0 - 4, 0), max(y0 - 4, 0), min(x1 + 5, hero.width), min(y1 + 5, hero.height)))
     hero.save(OUT, "WEBP", quality=80, method=6)
-    print(f"wrote {OUT} ({hero.width}x{hero.height}); index.html expects 935x1483")
+    print(f"wrote {OUT} ({hero.width}x{hero.height}); index.html expects 939x1482")
 
 
 if __name__ == "__main__":
