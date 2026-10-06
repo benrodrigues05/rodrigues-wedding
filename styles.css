@@ -187,7 +187,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   position: absolute;
   inset: 5% 4.5% 0;
   border-radius: 2px 2px 0 0;
-  background: url("assets/liner.webp?v=ed8e408a") 50% 0 / 150px 150px;
+  background: url("assets/liner.webp?v=09b85ff6") 50% 0 / 150px 150px;
 }
 .env-wall::after {            /* shadow inside the envelope's mouth */
   content: "";
@@ -221,7 +221,7 @@ html.js:not(.is-open) body { overflow: hidden; }
 .flap-paper,
 .flap-liner { position: absolute; inset: 0; }
 .flap-paper { clip-path: polygon(0 0, 100% 0, 50% 100%); background: #E7DFD0; }
-.flap-liner { clip-path: polygon(5.5% 0, 94.5% 0, 50% 90%); background: url("assets/liner.webp?v=ed8e408a") 50% 0 / 150px 150px; }
+.flap-liner { clip-path: polygon(5.5% 0, 94.5% 0, 50% 90%); background: url("assets/liner.webp?v=09b85ff6") 50% 0 / 150px 150px; }
 
 .env-seal {
   position: absolute;
