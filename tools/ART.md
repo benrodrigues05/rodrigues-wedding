@@ -72,6 +72,26 @@ accessories are in `source/retired/`.
 | gramophone (playlist) | 8ef3ca4e-8144-450b-9055-242d29804314 |
 | bedside table with vase | 78fa2c60-ea39-4a05-b423-ef9b52973b30 |
 
+### Subtle flowers (6 October 2026, third pass)
+
+Ben found the coastal pass too busy, so every floral piece was redrawn again
+with one to three blooms, slender stems and lots of empty space. These are the
+current versions (same file names as above). The busier coastal versions are
+the job IDs in the previous table.
+
+| Asset | Higgsfield job |
+|---|---|
+| cover arch frame (`source/arch-frame.png`) | 0118e38f-f979-4858-98d1-73a73ff9cbb6 |
+| `coastal-corner` (frangipani sprig) | 336735c1-1beb-485d-8881-fba7bd4e4bd6 |
+| `coastal-spray` (single bird-of-paradise) | 34de33f6-3b2d-4d01-8c22-3024c95172c5 |
+| `coastal-garland` (slender vine) | 13d6c94b-a02f-46fb-8803-5841cf15e6da |
+| `coastal-sprig` (single frangipani) | ecf930f9-5934-43e4-b562-2141bdbb5473 |
+| `stamp` | 06977b5a-a722-4a75-9554-046c931dda50 |
+| `liner` (opaque) | 1d57a88b-6a6e-4885-8e32-6a4733feaade |
+| `cake` | 68d1ee52-c1d9-4ef8-94f2-7ddb5c67568f |
+| `gramophone` | fa60bf45-e1c9-4e54-b3d1-556cc83b3099 |
+| `nightstand` | 83ac51de-d077-48ba-b422-2b78f8058e8c |
+
 Made by code rather than generated: the envelope, postmark, napkin fringe
 (`fringe.svg`), paper grain, stitching, link-preview image (`og.jpg`, a
 screenshot of the envelope) and the icons (the wax seal on paper).
