@@ -378,7 +378,7 @@
         problem = byId('rsvp-problem'), submit = byId('rsvp-submit'),
         submitLabel = byId('rsvp-submit-label'), done = byId('rsvp-done'),
         doneName = byId('done-name'), doneMessage = byId('done-message'),
-        edit = byId('rsvp-edit'), previewNote = byId('preview-note'),
+        edit = byId('rsvp-edit'), previewNote = byId('preview-note'), head = byId('rsvp-head'),
         guestsField = byId('rsvp-guests-field'), guestsSelect = byId('rsvp-guests'),
         guestsHint = byId('rsvp-guests-hint'), invited = byId('rsvp-invited');
     var STORE_KEY = 'wedding-rsvp';
@@ -451,6 +451,7 @@
 
     edit.addEventListener('click', function () {
       done.hidden = true;
+      head.hidden = false;
       form.hidden = false;
       nameInput.focus();
     });
@@ -462,6 +463,8 @@
         : 'You’ll be missed. Thank you for letting us know.';
       if (reply.songs) doneMessage.textContent += ' Your songs are on our list.';
       if (reply.preview) doneMessage.textContent += ' (Preview only, so nothing was sent.)';
+      // once they've replied, the card just says thank you
+      head.hidden = true;
       form.hidden = true;
       done.hidden = false;
       if (moveFocus) done.focus();

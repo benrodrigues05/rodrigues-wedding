@@ -233,7 +233,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   filter: drop-shadow(0 2px 2.5px rgba(var(--shadow), .35));
 }
 
-/* --- the folded letter (geometry is set by script.js?v=7232be33) --- */
+/* --- the folded letter (geometry is set by script.js?v=94473927) --- */
 .letter {
   position: absolute;
   z-index: 3;
@@ -1065,7 +1065,7 @@ html.js:not(.is-open) body { overflow: hidden; }
 .closing-names { margin: 0 0 .5rem; font: 400 var(--fs-title)/1.1 var(--font-script); }
 
 
-/* --- floating RSVP shortcut (shown by script.js?v=7232be33 once you scroll) --- */
+/* --- floating RSVP shortcut (shown by script.js?v=94473927 once you scroll) --- */
 .rsvp-fab {
   position: fixed;
   z-index: 40;
