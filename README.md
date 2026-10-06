@@ -86,10 +86,16 @@ The site is served by GitHub Pages from the `gh-pages` branch, which holds
 just the `site/` folder. After changing anything in `site/`:
 
 ```bash
+python3 tools/version_assets.py
 git add -A && git commit -m "Update invitation"
 git push origin main
 git subtree push --prefix site origin gh-pages
 ```
+
+`version_assets.py` tags every picture, the stylesheet and the script with a
+fingerprint of its contents (`?v=…`). Phones keep saved copies of files for a
+while, so without it a changed picture that keeps its name can show the old
+version.
 
 GitHub republishes within a minute or two. The page asks search engines not to
 index it, so it only reaches people who have the link.

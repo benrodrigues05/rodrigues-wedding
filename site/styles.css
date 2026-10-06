@@ -34,7 +34,7 @@
   --gutter: 16px;
   --column: 34rem;
   --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .28 0 0 0 0 .22 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --linen-tex: url("assets/linen.webp");
+  --linen-tex: url("assets/linen.webp?v=b192e972");
 
   color-scheme: light;
 }
@@ -187,7 +187,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   position: absolute;
   inset: 5% 4.5% 0;
   border-radius: 2px 2px 0 0;
-  background: url("assets/liner.webp") 50% 0 / 150px 150px;
+  background: url("assets/liner.webp?v=797885ae") 50% 0 / 150px 150px;
 }
 .env-wall::after {            /* shadow inside the envelope's mouth */
   content: "";
@@ -221,7 +221,7 @@ html.js:not(.is-open) body { overflow: hidden; }
 .flap-paper,
 .flap-liner { position: absolute; inset: 0; }
 .flap-paper { clip-path: polygon(0 0, 100% 0, 50% 100%); background: #E7DFD0; }
-.flap-liner { clip-path: polygon(5.5% 0, 94.5% 0, 50% 90%); background: url("assets/liner.webp") 50% 0 / 150px 150px; }
+.flap-liner { clip-path: polygon(5.5% 0, 94.5% 0, 50% 90%); background: url("assets/liner.webp?v=797885ae") 50% 0 / 150px 150px; }
 
 .env-seal {
   position: absolute;
@@ -233,7 +233,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   filter: drop-shadow(0 2px 2.5px rgba(var(--shadow), .35));
 }
 
-/* --- the folded letter (geometry is set by script.js) --- */
+/* --- the folded letter (geometry is set by script.js?v=0f5ac863) --- */
 .letter {
   position: absolute;
   z-index: 3;
@@ -750,7 +750,7 @@ html.js:not(.is-open) body { overflow: hidden; }
   left: 0;
   right: 0;
   height: 20px;
-  background: url("assets/fringe.svg") 0 0 / 180px 20px repeat-x;
+  background: url("assets/fringe.svg?v=9f7962ef") 0 0 / 180px 20px repeat-x;
   filter: drop-shadow(0 1px 1px rgba(var(--shadow), .12));
 }
 .napkin::before { bottom: calc(100% - 1px); scale: 1 -1; }
@@ -1057,7 +1057,7 @@ html.js:not(.is-open) body { overflow: hidden; }
 .closing-names { margin: 0 0 .5rem; font: 400 var(--fs-title)/1.1 var(--font-script); }
 
 
-/* --- floating RSVP shortcut (shown by script.js once you scroll) --- */
+/* --- floating RSVP shortcut (shown by script.js?v=0f5ac863 once you scroll) --- */
 .rsvp-fab {
   position: fixed;
   z-index: 40;
